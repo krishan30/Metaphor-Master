@@ -8,14 +8,21 @@
 <!--<link href="main.css" rel="stylesheet">-->
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-
 <!------ Include the above in your HEAD tag ---------->
+<script>// Save data to local storage
+localStorage.setItem("result_state", "init" );
+var result_poems_section ;
+</script>
 <script>
 	function MyFunction(aggregate){
 		keyword = aggregate.name;
 		console.log("keyword: "+keyword);
 		poems_array = document.getElementsByClassName('search-result row');
 		poems_array = Array.from(poems_array);
+		if (localStorage.getItem("result_state") === "init"){
+			result_poems_section= poems_array;
+			localStorage.setItem("result_state","changed")
+		}
 		matching_poems = poems_array.filter(keyword_filter,keyword);
 		len_matching = matching_poems.length;
 		len_original = poems_array.length;
@@ -26,10 +33,41 @@
 		header.innerHTML = `<h2 class="lead" id="results"><strong class="text-danger">${len_matching}</strong> results out of ${len_original} matches the criteria</h2>`;
 
 		var tags_ul = document.getElementById("tags");
+		tags_ul.setAttribute("class","list-group");
 		var tags_li = document.createElement("li");
-		tags_li.setAttribute("style","display:inline-block; padding:5px; margin:10px; border: 1px solid black; border-radius: 5px;");
+		//tags_li.setAttribute("style","display:inline-block; padding:5px; margin:10px; border: 1px solid black; border-radius: 5px;");
+		tags_li.setAttribute("class","list-group-item");
+		tags_li.setAttribute("style","display: inline-block; margin-right: 10px;");
 		tags_li.appendChild(document.createTextNode(keyword));
 		tags_ul.appendChild(tags_li);
+
+			// 2. Create a new button element
+		var button = document.createElement("button");
+		button.setAttribute("style","margin-left:5px;padding:7px")
+		button.setAttribute("class","btn btn-outline-danger btn-lg")
+		button.setAttribute("textContent","X")
+		// 3. Add text or content to the button
+		//button.appendChild(document.createTextNode("X")); // You can replace "Click Me" with the desired button label.
+
+		// Set an ID for the button
+		button.id = "removeFilterButton";
+
+		// Append the button to the <li> element
+		tags_li.appendChild(button);
+
+		// Attach a click event listener to the button
+		button.addEventListener("click", function() {
+			// Remove the filter and update the displayed content here
+			// For example, you can clear the filter and display all results
+			header = document.getElementById('results');
+			poems_array = result_poems_section;
+		    header.innerHTML = `<h2 class="lead" id="results"> About <strong class="text-danger">{{num_results}}</strong> results for <strong class="text-danger">{{query}}</strong></h2>`;
+			section = document.getElementById('poem_section');
+			section.innerHTML = poems_array.map(e => e.outerHTML).join()
+			// Optionally, remove the button after it's clicked
+			tags_ul.removeChild(tags_li);
+		});
+
 	}
 
 	function keyword_filter(element){
