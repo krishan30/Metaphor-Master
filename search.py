@@ -43,7 +43,6 @@ def boost(boost_array):
 
 def search(search_text, search_type):
     phrase = search_text.strip()
-
     if search_type == "anywhere":
         flags = booster.boost_field(phrase)
         fields = boost(flags)
@@ -69,5 +68,3 @@ def search(search_text, search_type):
 
     res = es.search(index=INDEX, body=query_body)  # Calling the elastic search client with the corresponding query body
     return res
-
-

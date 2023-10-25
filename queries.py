@@ -14,7 +14,7 @@ def single_phrase_prefix_match(query, field):
         "aggs": {
             "Poet Filter": {
                 "terms": {
-                    "field": "Poet_Sinhala_Name.keyword",
+                    "field": "Poet_English_Name.keyword",
                     "size": 10
                 }
             },

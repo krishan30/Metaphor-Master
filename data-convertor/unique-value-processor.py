@@ -4,11 +4,6 @@ import pandas as pd
 
 
 def csv_to_json_column_wise(csv_file_path):
-    json_array = []
-
-    poet_en = []
-    poet_sn = []
-
     # Read the CSV file into a DataFrame
     df = pd.read_csv(csv_file_path, encoding='utf-8')
 
